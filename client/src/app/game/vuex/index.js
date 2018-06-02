@@ -1,8 +1,9 @@
 import * as actions from './actions'
-import getters from './getters'
+import * as getters from './getters'
 import mutations from './mutations'
 
 const state = {
+  activePiece: null,
   pieces: [
     {
       type: 'rook',

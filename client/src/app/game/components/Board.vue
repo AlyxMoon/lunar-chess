@@ -1,7 +1,11 @@
 <template>
   <div>
     <div class="chessboard">
-      <div :class="getTileType(i)" v-for="i in 64" :key="i - 1">
+      <div
+        :class="getTileType(i)"
+        v-for="i in 64"
+        :key="i - 1"
+        @click="setOrMoveActivePiece(i - 1)" >
         <div class="piece-wrapper" v-if="isPieceOnTile(i - 1)">
           <img
             class="piece"
@@ -13,7 +17,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex'
+import { mapState, mapGetters, mapActions } from 'vuex'
 
 export default {
   name: 'gameBoard',
@@ -25,6 +29,11 @@ export default {
       'getTileType',
       'isPieceOnTile',
       'getImageOfPieceOnTile'
+    ])
+  },
+  methods: {
+    ...mapActions([
+      'setOrMoveActivePiece'
     ])
   }
 }

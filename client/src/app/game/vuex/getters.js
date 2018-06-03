@@ -1,34 +1,46 @@
-export const getTileType = (state, getters) => tile => {
+export const getTileClasses = state => tile => {
   let alternate
-  if (Math.floor((tile - 1) / 8) % 2 === 0) {
+  if (Math.floor(tile / 8) % 2 === 0) {
     alternate = tile % 2 === 0 ? 'a' : 'b'
   } else {
     alternate = tile % 2 === 1 ? 'a' : 'b'
   }
 
-  return `tile tile-${alternate}`
+  return `tile tile-${alternate} ${tile === state.activeTile ? 'active' : ''}`
 }
 
-export const isPieceOnTile = (state, getters) => tile => {
-  return state.pieces.some(piece => {
-    return piece.position === tile
+export const getPieceClasses = state => pieceIndex => {
+  if (pieceIndex === null || pieceIndex === undefined) return ''
+  let piece = state.pieces[pieceIndex]
+  return `piece ${piece.color} ${piece.type}`
+}
+
+export const isPieceOnTile = state => tile => {
+  return !(state.board[tile] === undefined || state.board[tile] === null)
+}
+
+export const getTypeOfPieceOnTile = state => tile => {
+  if (state.board[tile] === undefined || state.board[tile] === null) {
+    return null
+  } else {
+    return state.pieces[state.board[tile]].type
+  }
+}
+
+export const getColorOfPieceOnTile = state => tile => {
+  if (state.board[tile] === undefined || state.board[tile] === null) {
+    return null
+  } else {
+    return state.pieces[state.board[tile]].color
+  }
+}
+
+export const doesTileBelongToCurrentPlayer = state => tile => {
+  return getColorOfPieceOnTile(state)(tile) === state.currentPlayer
+}
+
+export const getKilledPieces = state => tile => {
+  return state.pieces.filter(piece => {
+    return !piece.alive
   })
-}
-
-export const getTypeofPieceOnTile = (state, getters) => tile => {
-  for (let i = 0, end = state.pieces.length; i < end; i++) {
-    if (state.pieces[i].position === tile) {
-      return state.pieces[i].type
-    }
-  }
-  return 'error'
-}
-
-export const getImageOfPieceOnTile = (state, getters) => tile => {
-  for (let i = 0, end = state.pieces.length; i < end; i++) {
-    if (state.pieces[i].position === tile) {
-      return `/static/pieces/${state.pieces[i].color}-${state.pieces[i].type}.png`
-    }
-  }
-  return ''
 }

@@ -1,25 +1,39 @@
-export const setOrMoveActivePiece = ({ commit, state }, position) => {
-  if (state.activePiece === null) {
-    let pieceIndex = getIndexofPieceOnTile(state, position)
-    if (pieceIndex === -1) return
-    commit('SET_ACTIVE_PIECE', { activePiece: pieceIndex })
+import {
+  isPieceOnTile,
+  doesTileBelongToCurrentPlayer
+} from './getters'
+
+export const setOrMoveActivePiece = ({ commit, state }, tile) => {
+  if (state.activeTile === undefined || state.activeTile === null) {
+    if (canSelectTile(state, tile)) {
+      commit('SET_ACTIVE_TILE', { tile })
+    }
   } else {
     // TODO: Check if move is valid
-    if (isTileOccupied(state, position)) return
-
-    commit('MOVE_PIECE', { index: state.activePiece, position })
-  }
-}
-
-const isTileOccupied = (state, position) => {
-  return getIndexofPieceOnTile(state, position) > -1
-}
-
-const getIndexofPieceOnTile = (state, position) => {
-  for (let i = 0, end = state.pieces.length; i < end; i++) {
-    if (state.pieces[i].position === position) {
-      return i
+    // TODO: EN PASSENT
+    if (isPieceOnTile(state)(tile)) {
+      if (canKillPiece(state)(tile)) {
+        commit('KILL_PIECE', { index: state.board[tile] })
+      } else {
+        return
+      }
     }
+
+    commit('MOVE_PIECE', { index: state.board[state.activeTile], tile })
+    commit('SWITCH_TURN')
   }
-  return -1
+}
+
+const canSelectTile = (state, tile) => {
+  if (!isPieceOnTile(state)(tile)) return false
+  if (!doesTileBelongToCurrentPlayer(state)(tile)) return false
+
+  return true
+}
+
+const canKillPiece = state => tile => {
+  let firstPiece = state.pieces[state.board[state.activeTile]]
+  let secondPiece = state.pieces[state.board[tile]]
+
+  return firstPiece.color !== secondPiece.color
 }

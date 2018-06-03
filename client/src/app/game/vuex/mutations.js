@@ -1,6 +1,7 @@
 export default {
-  SET_ACTIVE_TILE (state, payload) {
+  SET_ACTIVE (state, payload) {
     state.activeTile = payload.tile
+    state.activePiece = state.pieces[state.board[payload.tile]]
   },
 
   MOVE_PIECE (state, payload) {

@@ -9,6 +9,7 @@
         v-for="(pieceIndex, tile) in board"
         :key="tile"
         @click="setOrMoveActivePiece(tile)" >
+        {{tile}}
         <div class="piece-wrapper" v-if="isPieceOnTile(tile)">
           <i
             :class="getPieceClasses(pieceIndex)"

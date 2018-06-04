@@ -54,10 +54,48 @@ describe('Movement Rules', () => {
       expect(canPieceMoveToTile(board, pieces, [], pieces[5], 5)).toBe(false)
     })
     it('pieces cannot move onto an allied piece', () => {
-      expect(true).toBe(false)
+      board[0] = 0
+      board[1] = 2
+      board[8] = 1
+      board[9] = 3
+      let pieces = [
+        {
+          type: 'pawn',
+          tile: 0,
+          color: 'white'
+        },
+        {
+          type: 'pawn',
+          tile: 8,
+          color: 'white'
+        },
+        {
+          type: 'pawn',
+          tile: 1,
+          color: 'black'
+        },
+        {
+          type: 'pawn',
+          tile: 9,
+          color: 'black'
+        }
+      ]
+
+      expect(canPieceMoveToTile(board, pieces, pieces[0], 8)).toBe(false)
+      expect(canPieceMoveToTile(board, pieces, pieces[3], 1)).toBe(false)
     })
     it('pieces cannot move off of the board', () => {
-      expect(true).toBe(false)
+      board[0] = 0
+      let pieces = [
+        {
+          type: 'queen',
+          color: 'white',
+          tile: 0
+        }
+      ]
+
+      expect(canPieceMoveToTile(board, pieces, pieces[0], -8)).toBe(false)
+      expect(canPieceMoveToTile(board, pieces, pieces[0], 64)).toBe(false)
     })
   })
 
@@ -310,6 +348,107 @@ describe('Movement Rules', () => {
 
       expect(canPieceMoveToTile(board, pieces, previousMoves1, pieces[0], 9)).toBe(true)
       expect(canPieceMoveToTile(board, pieces, previousMoves2, pieces[0], 8)).toBe(false)
+    })
+  })
+
+  describe('rook movement', () => {
+    it('rook can move forwards, backwards, or sideways', () => {
+      board[35] = 0
+      let pieces = [{
+        type: 'rook',
+        color: 'white',
+        tile: 35
+      }]
+
+      let allowedTiles = [3, 11, 19, 27, 32, 33, 34, 36, 37, 38, 39, 43, 51, 59]
+      for (let i = 0, end = allowedTiles.length; i < end; i++) {
+        expect(canPieceMoveToTile(board, pieces, [], pieces[0], allowedTiles[i])).toBe(true)
+      }
+    })
+    it('rooks cannot move anything that is not forwards, backwards, or sideways', () => {
+      board[35] = 0
+      let pieces = [{
+        type: 'rook',
+        color: 'white',
+        tile: 35
+      }]
+
+      let allowedTiles = [3, 11, 19, 27, 32, 33, 34, 36, 37, 38, 39, 43, 51, 59]
+      for (let i = 0, end = 64; i < end; i++) {
+        if (!allowedTiles.includes(i)) {
+          expect(canPieceMoveToTile(board, pieces, [], pieces[0], i)).toBe(false)
+        }
+      }
+    })
+    it('rooks cannot move through any piece', () => {
+      board[35] = 0
+      board[27] = 1
+      board[34] = 2
+      board[36] = 3
+      board[43] = 4
+      let pieces = [
+        {
+          type: 'rook',
+          color: 'white',
+          tile: 35
+        },
+        {
+          type: 'pawn',
+          color: 'white',
+          tile: 27
+        },
+        {
+          type: 'pawn',
+          color: 'white',
+          tile: 34
+        },
+        {
+          type: 'pawn',
+          color: 'black',
+          tile: 36
+        },
+        {
+          type: 'pawn',
+          color: 'black',
+          tile: 43
+        }
+      ]
+
+      let plannedTiles = [3, 11, 19, 32, 33, 37, 38, 39, 51, 59]
+      for (let i = 0, end = plannedTiles.length; i < end; i++) {
+        expect(canPieceMoveToTile(board, pieces, [], pieces[0], plannedTiles[i])).toBe(false)
+      }
+    })
+    it('rooks can move into an enemy piece', () => {
+      board[0] = 0
+      board[1] = 1
+      board[8] = 2
+      board[9] = 3
+      let pieces = [
+        {
+          type: 'rook',
+          tile: 0,
+          color: 'white'
+        },
+        {
+          type: 'pawn',
+          tile: 1,
+          color: 'black'
+        },
+        {
+          type: 'rook',
+          tile: 8,
+          color: 'black'
+        },
+        {
+          type: 'pawn',
+          tile: 9,
+          color: 'white'
+        }
+      ]
+
+      expect(canPieceMoveToTile(board, pieces, [], pieces[0], 1)).toBe(true)
+      expect(canPieceMoveToTile(board, pieces, [], pieces[2], 9)).toBe(true)
     })
   })
 })

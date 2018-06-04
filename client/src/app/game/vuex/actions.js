@@ -10,7 +10,7 @@ export const setOrMoveActivePiece = ({ commit, state }, tile) => {
       commit('SET_ACTIVE', { tile })
     }
   } else {
-    if (canPieceMoveToTile(state.board, state.pieces, [], state.activePiece.type, tile)) {
+    if (canPieceMoveToTile(state.board, state.pieces, [], state.activePiece, tile)) {
       if (isPieceOnTile(state)(tile)) {
         commit('KILL_PIECE', { index: state.board[tile] })
       }
@@ -29,15 +29,24 @@ export const canSelectTile = (state, tile) => {
 }
 
 export const canPieceMoveToTile = (board, pieces, previousMoves, activePiece, tile) => {
-  // RULE 1 - pieces cannot move onto themselves
+  let diff = abs(activePiece.tile - tile)
+  let dir = activePiece.color === 'white' ? 1 : -1
+  let currentRow = ~~(activePiece.tile / 8)
+  let nextRow = ~~(tile / 8)
+
+  // RULE - pieces cannot move off of the board
+  if (tile < 0 || tile > 64) return false
+
+  // RULE - pieces cannot move onto themselves
   if (activePiece.tile === tile) return false
 
-  // RULE 2 - pieces can't move into pieces of the same color
+  // RULE - pieces can't move into pieces of the same color
+  if (board[tile] !== null) {
+    if (pieces[board[tile]].color === activePiece.color) return false
+  }
 
-  // RULE - pawns cannot move backwards or sideways
   if (activePiece.type === 'pawn') {
-    let currentRow = ~~(activePiece.tile / 8)
-    let nextRow = ~~(tile / 8)
+    // RULE - pawns cannot move backwards or sideways
 
     if (activePiece.color === 'white') {
       if (nextRow <= currentRow) return false
@@ -45,45 +54,23 @@ export const canPieceMoveToTile = (board, pieces, previousMoves, activePiece, ti
     if (activePiece.color === 'black') {
       if (nextRow >= currentRow) return false
     }
-  }
 
-  // RULE - pawns can only make a valid forward move
-  if (activePiece.type === 'pawn') {
-    let diff = abs(activePiece.tile - tile)
+    // RULE - pawns can only make a valid forward move
     if ([7, 8, 9, 16].indexOf(diff) === -1) return false
-  }
 
-  // RULE - pawns can make a double move only on first move
-  if (activePiece.type === 'pawn') {
-    let diff = abs(activePiece.tile - tile)
+    // RULE - pawns can make a double move only on first move
     if (diff === 16 && activePiece.moves > 0) return false
-  }
 
-  // RULE - pawns cannot move forwards into an enemy piece
-  if (activePiece.type === 'pawn') {
-    let diff = abs(activePiece.tile - tile)
+    // RULE - pawns cannot move forwards into an any piece
     if (diff === 8 && board[tile] !== null) return false
-  }
 
-  // RULE - pawns cannot move forwards past an enemy piece
-  if (activePiece.type === 'pawn') {
-    let diff = abs(activePiece.tile - tile)
-    let dir = activePiece.color === 'white' ? 1 : -1
+    // RULE - pawns cannot move forwards past an enemy piece
     if (diff === 16 && board[activePiece.tile + (8 * dir)] !== null) return false
-  }
 
-  // RULE - pawns can only attack one tile diagonally forward
-  if (activePiece.type === 'pawn') {
-    let diff = abs(activePiece.tile - tile)
-    let dir = activePiece.color === 'white' ? 1 : -1
+    // RULE - pawns can only attack one tile diagonally forward
     if ((diff === 7 || diff === 9) && (board[activePiece.tile + (diff * dir)] === null)) return false
-  }
 
-  // RULES - pawns can attack en passent only when the enemy pawn has just made a double move in the previous turn
-  if (activePiece.type === 'pawn') {
-    let diff = abs(activePiece.tile - tile)
-    let dir = activePiece.color === 'white' ? 1 : -1
-
+    // RULES - pawns can attack en passent only when the enemy pawn has just made a double move in the previous turn
     if (board[activePiece.tile + (diff * dir)] === null && (diff === 7 || diff === 9)) {
       let change = diff === 7 ? -dir : dir
       let enemyPiece = board[activePiece.tile + change]
@@ -94,6 +81,20 @@ export const canPieceMoveToTile = (board, pieces, previousMoves, activePiece, ti
         let lastMove = previousMoves[previousMoves.length - 1]
         if (enemyPiece !== lastMove.piece) return false
         if (abs(lastMove.previousTile - lastMove.newTile) !== 16) return false
+      }
+    }
+  }
+
+  if (activePiece.type === 'rook') {
+    // rook can move forwards, backwards, or sideways
+    if (!(currentRow === nextRow || diff % 8 === 0)) return false
+    else {
+      // rooks cannot move through any piece
+      let increment = currentRow === nextRow ? 1 : 8
+      if (diff > increment) {
+        for (let i = increment, end = diff; i < end; i += increment) {
+          if (board[activePiece.tile + (i * dir)] !== null) return false
+        }
       }
     }
   }

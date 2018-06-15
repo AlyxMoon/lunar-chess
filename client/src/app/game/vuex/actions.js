@@ -9,6 +9,8 @@ export const setOrMoveActivePiece = ({ commit, state }, tile) => {
     if (canSelectTile(state, tile)) {
       commit('SET_ACTIVE', { tile })
     }
+  } else if (state.activeTile === tile) {
+    commit('UNSET_ACTIVE')
   } else {
     if (canPieceMoveToTile(state.board, state.pieces, [], state.activePiece, tile)) {
       if (isPieceOnTile(state)(tile)) {
@@ -16,6 +18,7 @@ export const setOrMoveActivePiece = ({ commit, state }, tile) => {
       }
 
       commit('MOVE_PIECE', { index: state.board[state.activeTile], tile })
+      commit('UNSET_ACTIVE')
       commit('SWITCH_TURN')
     }
   }
@@ -33,6 +36,10 @@ export const canPieceMoveToTile = (board, pieces, previousMoves, activePiece, ti
   let dir = activePiece.color === 'white' ? 1 : -1
   let currentRow = ~~(activePiece.tile / 8)
   let nextRow = ~~(tile / 8)
+  let diffRow = abs(currentRow - nextRow)
+  let currentCol = activePiece.tile % 8
+  let nextCol = tile % 8
+  let diffCol = abs(currentCol - nextCol)
 
   // RULE - pieces cannot move off of the board
   if (tile < 0 || tile > 64) return false
@@ -41,7 +48,7 @@ export const canPieceMoveToTile = (board, pieces, previousMoves, activePiece, ti
   if (activePiece.tile === tile) return false
 
   // RULE - pieces can't move into pieces of the same color
-  if (board[tile] !== null) {
+  if (board[tile] !== null && board[tile] !== undefined) {
     if (pieces[board[tile]].color === activePiece.color) return false
   }
 
@@ -97,6 +104,11 @@ export const canPieceMoveToTile = (board, pieces, previousMoves, activePiece, ti
         }
       }
     }
+  }
+
+  if (activePiece.type === 'knight') {
+    // RULE - knight can move in an L-shape
+    if (!((diffRow === 1 && diffCol === 2) || (diffRow === 2 && diffCol === 1))) return false
   }
 
   return true

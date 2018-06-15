@@ -3,12 +3,14 @@ export default {
     state.activeTile = payload.tile
     state.activePiece = state.pieces[state.board[payload.tile]]
   },
-
+  UNSET_ACTIVE (state) {
+    state.activeTile = null
+    state.activePiece = null
+  },
   MOVE_PIECE (state, payload) {
     state.board[state.activeTile] = null
     state.board[payload.tile] = payload.index
     state.pieces[payload.index].tile = payload.tile
-    state.activeTile = null
   },
 
   KILL_PIECE (state, payload) {

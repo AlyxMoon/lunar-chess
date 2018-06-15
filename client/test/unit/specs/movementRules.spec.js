@@ -451,4 +451,156 @@ describe('Movement Rules', () => {
       expect(canPieceMoveToTile(board, pieces, [], pieces[2], 9)).toBe(true)
     })
   })
+
+  describe('knight movement', () => {
+    it('can move in an L-shaped pattern', () => {
+      board[27] = 0
+      let pieces = [{
+        type: 'knight',
+        color: 'white',
+        tile: 27
+      }]
+
+      let allowedTiles = [10, 12, 17, 21, 33, 37, 42, 44]
+      for (let i = 0, end = allowedTiles.length; i < end; i++) {
+        expect(canPieceMoveToTile(board, pieces, [], pieces[0], allowedTiles[i])).toBe(true)
+      }
+    })
+
+    it('cannot move in any other pattern but an L-shape', () => {
+      board[27] = 0
+      let pieces = [{
+        type: 'knight',
+        color: 'white',
+        tile: 27
+      }]
+
+      let allowedTiles = [10, 12, 17, 21, 33, 37, 42, 44]
+      for (let i = 0, end = 64; i < end; i++) {
+        if (!allowedTiles.includes(i)) {
+          expect(canPieceMoveToTile(board, pieces, [], pieces[0], i)).toBe(false)
+        }
+      }
+    })
+
+    it('cannot move the knight in a way that would take it off the board', () => {
+      board[8] = 0
+      board[23] = 1
+      let pieces = [
+        {
+          type: 'knight',
+          color: 'white',
+          tile: 16
+        },
+        {
+          type: 'knight',
+          color: 'white',
+          tile: 23
+        }
+      ]
+
+      let check1 = [-1, 6, 22, 31]
+      for (let i = 0, end = check1.length; i < end; i++) {
+        expect(canPieceMoveToTile(board, pieces, [], pieces[0], check1[i])).toBe(false)
+      }
+
+      let check2 = [8, 17, 33, 40]
+      for (let i = 0, end = check2.length; i < end; i++) {
+        expect(canPieceMoveToTile(board, pieces, [], pieces[1], check2[i])).toBe(false)
+      }
+    })
+
+    it('can move through friendly pieces', () => {
+      board[27] = 0
+      board[28] = 1
+      board[29] = 2
+      board[35] = 3
+      board[36] = 4
+      let pieces = [
+        {
+          type: 'knight',
+          color: 'white',
+          tile: 27
+        },
+        {
+          type: 'pawn',
+          color: 'white',
+          tile: 28
+        },
+        {
+          type: 'pawn',
+          color: 'white',
+          tile: 29
+        },
+        {
+          type: 'pawn',
+          color: 'white',
+          tile: 35
+        },
+        {
+          type: 'pawn',
+          color: 'white',
+          tile: 36
+        }
+      ]
+
+      expect(canPieceMoveToTile(board, pieces, [], pieces[0], 37)).toBe(true)
+    })
+
+    it('can move through enemy pieces', () => {
+      board[27] = 0
+      board[28] = 1
+      board[29] = 2
+      board[35] = 3
+      board[36] = 4
+      let pieces = [
+        {
+          type: 'knight',
+          color: 'white',
+          tile: 27
+        },
+        {
+          type: 'pawn',
+          color: 'black',
+          tile: 28
+        },
+        {
+          type: 'pawn',
+          color: 'black',
+          tile: 29
+        },
+        {
+          type: 'pawn',
+          color: 'black',
+          tile: 35
+        },
+        {
+          type: 'pawn',
+          color: 'black',
+          tile: 36
+        }
+      ]
+
+      expect(canPieceMoveToTile(board, pieces, [], pieces[0], 37)).toBe(true)
+    })
+
+    it('can end it\'s move on an enemy piece', () => {
+      board[27] = 0
+      board[37] = 1
+      let pieces = [
+        {
+          type: 'knight',
+          color: 'white',
+          tile: 27
+        },
+        {
+          type: 'pawn',
+          color: 'black',
+          tile: 37
+        }
+      ]
+
+      expect(canPieceMoveToTile(board, pieces, [], pieces[0], 37)).toBe(true)
+    })
+  })
 })

@@ -38,7 +38,8 @@ export default {
     ...mapState({
       board: state => state.game.board,
       pieces: state => state.game.pieces,
-      currentPlayer: state => state.game.currentPlayer
+      currentPlayer: state => state.game.currentPlayer,
+      showPossibleMoves: state => state.game.showPossibleMoves
     }),
     ...mapGetters([
       'getTileClasses',
@@ -79,6 +80,10 @@ export default {
 
     &.active {
       background-color: #2CB32C;
+    }
+
+    &.tile-possibleMove {
+      background-color: #20B2AA;
     }
   }
 

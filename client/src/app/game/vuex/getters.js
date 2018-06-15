@@ -1,3 +1,5 @@
+import { canPieceMoveToTile } from './actions'
+
 export const getTileClasses = state => tile => {
   let alternate
   if (Math.floor(tile / 8) % 2 === 0) {
@@ -6,7 +8,14 @@ export const getTileClasses = state => tile => {
     alternate = tile % 2 === 1 ? 'a' : 'b'
   }
 
-  return `tile tile-${alternate} ${tile === state.activeTile ? 'active' : ''}`
+  let canMoveToTile = ''
+  if (state.activePiece && state.showPossibleMoves) {
+    if (canPieceMoveToTile(state.board, state.pieces, state.previousMoves, state.activePiece, tile)) {
+      canMoveToTile = 'tile-possibleMove'
+    }
+  }
+
+  return `tile tile-${alternate} ${canMoveToTile} ${tile === state.activeTile ? 'active' : ''}`
 }
 
 export const getPieceClasses = state => pieceIndex => {

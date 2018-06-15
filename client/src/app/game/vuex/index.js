@@ -14,6 +14,7 @@ for (let i = 0, end = 64; i < end; i++) {
 }
 
 const state = {
+  showPossibleMoves: true,
   currentPlayer: 'white',
   activeTile: null,
   moves: [],

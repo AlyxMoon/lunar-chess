@@ -34,12 +34,20 @@ export const canSelectTile = (state, tile) => {
 export const canPieceMoveToTile = (board, pieces, previousMoves, activePiece, tile) => {
   let diff = abs(activePiece.tile - tile)
   let dir = activePiece.color === 'white' ? 1 : -1
+
   let currentRow = ~~(activePiece.tile / 8)
   let nextRow = ~~(tile / 8)
   let diffRow = abs(currentRow - nextRow)
+  let dirRow = 0
+  if (nextRow > currentRow) dirRow = 1
+  if (nextRow < currentRow) dirRow = -1
+
   let currentCol = activePiece.tile % 8
   let nextCol = tile % 8
   let diffCol = abs(currentCol - nextCol)
+  let dirCol = 0
+  if (nextCol > currentCol) dirCol = 1
+  if (nextCol < currentCol) dirCol = -1
 
   // RULE - pieces cannot move off of the board
   if (tile < 0 || tile > 64) return false
@@ -109,6 +117,33 @@ export const canPieceMoveToTile = (board, pieces, previousMoves, activePiece, ti
   if (activePiece.type === 'knight') {
     // RULE - knight can move in an L-shape
     if (!((diffRow === 1 && diffCol === 2) || (diffRow === 2 && diffCol === 1))) return false
+  }
+
+  if (activePiece.type === 'bishop') {
+    // RULE - bishop can move diagonally
+    if (diffRow !== diffCol) return false
+
+    // RULE - bishops cannot move through pieces
+    for (let i = 1, end = diffRow; i < end; i++) {
+      let checkedTile = (currentRow + (i * dirRow)) * 8 + (currentCol + (i * dirCol))
+      if (board[checkedTile] !== null && board[checkedTile] !== undefined) return false
+    }
+  }
+
+  if (activePiece.type === 'queen') {
+    // RULE - queen can move vertically, horizontally, or diagonally
+    if (!(diffRow === 0 || diffCol === 0 || diffRow === diffCol)) return false
+
+    // RULE - queen cannot move through pieces
+    for (let i = 1, end = Math.max(diffRow, diffCol); i < end; i++) {
+      let checkedTile = (currentRow + (i * dirRow)) * 8 + (currentCol + (i * dirCol))
+      if (board[checkedTile] !== null && board[checkedTile] !== undefined) return false
+    }
+  }
+
+  if (activePiece.type === 'king') {
+    // RULE - king can move 1 tile in any direction
+    if (diffRow > 1 || diffCol > 1) return false
   }
 
   return true

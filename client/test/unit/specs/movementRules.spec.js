@@ -603,4 +603,215 @@ describe('Movement Rules', () => {
       expect(canPieceMoveToTile(board, pieces, [], pieces[0], 37)).toBe(true)
     })
   })
+
+  describe('bishop movement', () => {
+    it('bishops can move in diagonal lines', () => {
+      board[35] = 0
+      let pieces = [{
+        type: 'bishop',
+        color: 'white',
+        tile: 35
+      }]
+
+      let allowedTiles = [7, 8, 14, 17, 21, 26, 28, 42, 44, 49, 53, 56, 62]
+      for (let i = 0, end = allowedTiles.length; i < end; i++) {
+        expect(canPieceMoveToTile(board, pieces, [], pieces[0], allowedTiles[i])).toBe(true)
+      }
+    })
+    it('bishops cannot move in anything that\'s not a diagonal line', () => {
+      board[35] = 0
+      let pieces = [{
+        type: 'bishop',
+        color: 'white',
+        tile: 35
+      }]
+
+      let allowedTiles = [7, 8, 14, 17, 21, 26, 28, 42, 44, 49, 53, 56, 62]
+      for (let i = 0, end = allowedTiles.length; i < end; i++) {
+        if (!allowedTiles.includes(i)) {
+          expect(canPieceMoveToTile(board, pieces, [], pieces[0], i)).toBe(false)
+        }
+      }
+    })
+    it('bishops cannot move through friendly pieces', () => {
+      board[35] = 0
+      board[26] = 1
+      let pieces = [
+        {
+          type: 'bishop',
+          color: 'white',
+          tile: 35
+        },
+        {
+          type: 'pawn',
+          color: 'white',
+          tile: 26
+        }
+      ]
+
+      expect(canPieceMoveToTile(board, pieces, [], pieces[0], 17)).toBe(false)
+    })
+    it('bishops cannot move through enemy pieces', () => {
+      board[35] = 0
+      board[26] = 1
+      let pieces = [
+        {
+          type: 'bishop',
+          color: 'white',
+          tile: 35
+        },
+        {
+          type: 'pawn',
+          color: 'black',
+          tile: 26
+        }
+      ]
+
+      expect(canPieceMoveToTile(board, pieces, [], pieces[0], 17)).toBe(false)
+    })
+    it('bishops can end the turn on an enemy piece', () => {
+      board[35] = 0
+      board[17] = 1
+      let pieces = [
+        {
+          type: 'bishop',
+          color: 'white',
+          tile: 35
+        },
+        {
+          type: 'pawn',
+          color: 'black',
+          tile: 17
+        }
+      ]
+
+      expect(canPieceMoveToTile(board, pieces, [], pieces[0], 17)).toBe(true)
+    })
+  })
+
+  describe('queen movement', () => {
+    it('queens can move vertically, horizontally, or diagonally', () => {
+      board[35] = 0
+      let pieces = [{
+        type: 'queen',
+        color: 'white',
+        tile: 35
+      }]
+
+      let allowedTiles = [3, 7, 8, 11, 14, 17, 19, 21, 26, 27, 28, 32, 33, 34, 36, 37, 38, 39, 42, 43, 44, 49, 51, 53, 56, 59, 62]
+      for (let i = 0, end = allowedTiles.length; i < end; i++) {
+        expect(canPieceMoveToTile(board, pieces, [], pieces[0], allowedTiles[i])).toBe(true)
+      }
+    })
+    it('queens cannot move into disallowed positions', () => {
+      board[35] = 0
+      let pieces = [{
+        type: 'queen',
+        color: 'white',
+        tile: 35
+      }]
+
+      let allowedTiles = [3, 7, 8, 11, 14, 17, 19, 21, 26, 27, 28, 32, 33, 34, 36, 37, 38, 39, 42, 43, 44, 49, 51, 53, 56, 59, 62]
+      for (let i = 0, end = allowedTiles.length; i < end; i++) {
+        if (!allowedTiles.includes(i)) {
+          expect(canPieceMoveToTile(board, pieces, [], pieces[0], i)).toBe(false)
+        }
+      }
+    })
+    it('queens cannot move through units', () => {
+      board[35] = 0
+      board[26] = 1
+      board[27] = 2
+      board[28] = 3
+      board[34] = 4
+      board[36] = 5
+      board[42] = 6
+      board[43] = 7
+      board[44] = 8
+
+      let pieces = [
+        {
+          type: 'queen',
+          color: 'white',
+          tile: 35
+        },
+        {
+          type: 'pawn',
+          color: 'white',
+          tile: 26
+        },
+        {
+          type: 'pawn',
+          color: 'white',
+          tile: 27
+        },
+        {
+          type: 'pawn',
+          color: 'white',
+          tile: 28
+        },
+        {
+          type: 'pawn',
+          color: 'white',
+          tile: 34
+        },
+        {
+          type: 'pawn',
+          color: 'white',
+          tile: 36
+        },
+        {
+          type: 'pawn',
+          color: 'white',
+          tile: 42
+        },
+        {
+          type: 'pawn',
+          color: 'white',
+          tile: 43
+        },
+        {
+          type: 'pawn',
+          color: 'white',
+          tile: 44
+        }
+      ]
+
+      let checkedTiles = [17, 18, 19, 20, 21, 25, 29, 33, 37, 41, 45, 49, 50, 51, 52, 53]
+      for (let i = 0, end = checkedTiles.length; i < end; i++) {
+        expect(canPieceMoveToTile(board, pieces, [], pieces[0], checkedTiles[i])).toBe(false)
+      }
+    })
+  })
+
+  describe('king movement', () => {
+    it('king can move 1 tile in any direction', () => {
+      board[35] = 0
+      let pieces = [{
+        type: 'king',
+        color: 'white',
+        tile: 35
+      }]
+
+      let allowedTiles = [26, 27, 28, 34, 36, 42, 43, 44]
+      for (let i = 0, end = allowedTiles.length; i < end; i++) {
+        expect(canPieceMoveToTile(board, pieces, [], pieces[0], allowedTiles[i])).toBe(true)
+      }
+    })
+    it('king cannot move further than 1 tile in any direction', () => {
+      board[35] = 0
+      let pieces = [{
+        type: 'king',
+        color: 'white',
+        tile: 35
+      }]
+
+      let allowedTiles = [26, 27, 28, 34, 36, 42, 43, 44]
+      for (let i = 0, end = 64; i < end; i++) {
+        if (!allowedTiles.includes(i)) {
+          expect(canPieceMoveToTile(board, pieces, [], pieces[0], i)).toBe(false)
+        }
+      }
+    })
+  })
 })

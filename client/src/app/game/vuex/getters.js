@@ -21,7 +21,8 @@ export const getTileClasses = state => tile => {
 export const getPieceClasses = state => pieceIndex => {
   if (pieceIndex === null || pieceIndex === undefined) return ''
   let piece = state.pieces[pieceIndex]
-  return `piece ${piece.color} ${piece.type}`
+  let selectable = piece.color === state.currentPlayer ? 'selectable' : ''
+  return `piece ${piece.color} ${piece.type} ${selectable}`
 }
 
 export const isPieceOnTile = state => tile => {

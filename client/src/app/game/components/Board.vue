@@ -73,13 +73,16 @@ export default {
 <style scoped lang="scss">
   .chessboard {
     background-color: black;
-    border: 1px solid black;
+    border: 2px solid rgba(0,0,0,0.8);
+    border-radius: 10px;
+    box-shadow: 3px 3px 20px 3px grey;
     display: grid;
     grid-template-rows: repeat(8, 1fr);
     grid-gap: 1px;
     grid-template-columns: repeat(8, 1fr);
     height: 600px;
     margin: auto;
+    overflow: hidden;
     width: 600px;
   }
 
@@ -100,6 +103,7 @@ export default {
 
     &.tile-possibleMove {
       background-color: #20B2AA;
+      cursor: pointer;
     }
   }
 
@@ -125,6 +129,10 @@ export default {
     font-size: 6vh;
     line-height: 6vh;
     text-align: center;
+
+    &.selectable {
+      cursor: pointer;
+    }
 
     &.white {
       &.bishop {

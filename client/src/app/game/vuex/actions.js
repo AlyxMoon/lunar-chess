@@ -37,7 +37,7 @@ export const isPlayerInCheck = (color, board, pieces) => {
   if (king === undefined) return false
 
   for (let i = 0, end = pieces.length; i < end; i++) {
-    if (pieces[i].color !== 'color') {
+    if (pieces[i].color !== color) {
       if (canPieceMoveToTile(board, pieces, [], pieces[i], king.tile, { checkForCheck: false })) {
         return true
       }

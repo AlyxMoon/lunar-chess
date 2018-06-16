@@ -11,6 +11,9 @@ export default {
     state.board[state.activeTile] = null
     state.board[payload.tile] = payload.index
     state.pieces[payload.index].tile = payload.tile
+
+    if (!state.pieces[payload.index].moves) state.pieces[payload.index].moves = 0
+    state.pieces[payload.index].moves += 1
   },
 
   KILL_PIECE (state, payload) {
@@ -29,6 +32,14 @@ export default {
       default:
         state.currentPlayer = 'red'
         break
+    }
+  },
+
+  SET_CHECK (state, payload) {
+    if (!status) {
+      state.playerInCheck = ''
+    } else {
+      state.playerInCheck = payload.color
     }
   }
 }

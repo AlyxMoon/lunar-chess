@@ -26,6 +26,11 @@
         </li>
       </ul>
     </div>
+    <div class="options">
+      <h1>Display Options</h1>
+      <input type="checkbox" name="showPossibleMoves" :checked="showPossibleMoves" @click="toggleOption('showPossibleMoves')" />
+      <label for="showPossibleMoves">Highlight the possible moves of the currently selected piece.</label>
+    </div>
   </div>
 </template>
 
@@ -39,7 +44,7 @@ export default {
       board: state => state.game.board,
       pieces: state => state.game.pieces,
       currentPlayer: state => state.game.currentPlayer,
-      showPossibleMoves: state => state.game.showPossibleMoves
+      showPossibleMoves: state => state.game.options.showPossibleMoves
     }),
     ...mapGetters([
       'getTileClasses',
@@ -50,7 +55,8 @@ export default {
   },
   methods: {
     ...mapActions([
-      'setOrMoveActivePiece'
+      'setOrMoveActivePiece',
+      'toggleOption'
     ])
   }
 }

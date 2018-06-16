@@ -4,6 +4,10 @@ import {
   doesTileBelongToCurrentPlayer
 } from './getters'
 
+export const toggleOption = ({ commit, state }, option) => {
+  commit('TOGGLE_OPTION', { option })
+}
+
 export const setOrMoveActivePiece = ({ commit, state }, tile) => {
   if (state.activeTile === undefined || state.activeTile === null) {
     if (canSelectTile(state, tile)) {

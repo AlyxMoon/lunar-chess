@@ -41,5 +41,9 @@ export default {
     } else {
       state.playerInCheck = payload.color
     }
+  },
+
+  TOGGLE_OPTION (state, payload) {
+    state.options[payload.option] = !state.options[payload.option]
   }
 }

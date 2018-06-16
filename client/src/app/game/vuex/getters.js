@@ -9,7 +9,7 @@ export const getTileClasses = state => tile => {
   }
 
   let canMoveToTile = ''
-  if (state.activePiece && state.showPossibleMoves) {
+  if (state.activePiece && state.options.showPossibleMoves) {
     if (canPieceMoveToTile(state.board, state.pieces, state.previousMoves, state.activePiece, tile)) {
       canMoveToTile = 'tile-possibleMove'
     }

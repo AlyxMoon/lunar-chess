@@ -837,5 +837,169 @@ describe('Movement Rules', () => {
         }
       }
     })
+    it('white king can castle if all conditions are met', () => {
+      board[3] = 0
+      board[0] = 1
+      board[7] = 2
+      let pieces = [
+        {
+          type: 'king',
+          color: 'white',
+          tile: 3,
+          moves: 0
+        },
+        {
+          type: 'rook',
+          color: 'white',
+          tile: 0,
+          moves: 0
+        },
+        {
+          type: 'rook',
+          color: 'white',
+          tile: 7,
+          moves: 0
+        }
+      ]
+
+      expect(canPieceMoveToTile(board, pieces, [], pieces[0], 1)).toBe(true)
+      expect(canPieceMoveToTile(board, pieces, [], pieces[0], 6)).toBe(true)
+    })
+    it('white king cannot castle if he has moved already', () => {
+      board[3] = 0
+      board[0] = 1
+      board[7] = 2
+      let pieces = [
+        {
+          type: 'king',
+          color: 'white',
+          tile: 3,
+          moves: 1
+        },
+        {
+          type: 'rook',
+          color: 'white',
+          tile: 0,
+          moves: 0
+        },
+        {
+          type: 'rook',
+          color: 'white',
+          tile: 7,
+          moves: 0
+        }
+      ]
+
+      expect(canPieceMoveToTile(board, pieces, [], pieces[0], 1)).toBe(false)
+      expect(canPieceMoveToTile(board, pieces, [], pieces[0], 6)).toBe(false)
+    })
+    it('white king cannot castle if the rook has moved', () => {
+      board[3] = 0
+      board[0] = 1
+      board[7] = 2
+      let pieces = [
+        {
+          type: 'king',
+          color: 'white',
+          tile: 3,
+          moves: 0
+        },
+        {
+          type: 'rook',
+          color: 'white',
+          tile: 0,
+          moves: 1
+        },
+        {
+          type: 'rook',
+          color: 'white',
+          tile: 7,
+          moves: 1
+        }
+      ]
+
+      expect(canPieceMoveToTile(board, pieces, [], pieces[0], 1)).toBe(false)
+      expect(canPieceMoveToTile(board, pieces, [], pieces[0], 6)).toBe(false)
+    })
+    it('white king cannot castle if a piece is in the way', () => {
+      board[3] = 0
+      board[0] = 1
+      board[7] = 2
+      board[2] = 3
+      board[5] = 4
+      let pieces = [
+        {
+          type: 'king',
+          color: 'white',
+          tile: 3,
+          moves: 0
+        },
+        {
+          type: 'rook',
+          color: 'white',
+          tile: 0,
+          moves: 0
+        },
+        {
+          type: 'rook',
+          color: 'white',
+          tile: 7,
+          moves: 0
+        },
+        {
+          type: 'pawn',
+          color: 'white',
+          tile: 2
+        },
+        {
+          type: 'pawn',
+          color: 'white',
+          tile: 5
+        }
+      ]
+
+      expect(canPieceMoveToTile(board, pieces, [], pieces[0], 1)).toBe(false)
+      expect(canPieceMoveToTile(board, pieces, [], pieces[0], 6)).toBe(false)
+    })
+    it('white king cannot castle if any positions are under attack', () => {
+      board[3] = 0
+      board[0] = 1
+      board[7] = 2
+      board[58] = 3
+      board[61] = 4
+      let pieces = [
+        {
+          type: 'king',
+          color: 'white',
+          tile: 3,
+          moves: 0
+        },
+        {
+          type: 'rook',
+          color: 'white',
+          tile: 0,
+          moves: 0
+        },
+        {
+          type: 'rook',
+          color: 'white',
+          tile: 7,
+          moves: 0
+        },
+        {
+          type: 'rook',
+          color: 'black',
+          tile: 58
+        },
+        {
+          type: 'rook',
+          color: 'black',
+          tile: 61
+        }
+      ]
+
+      expect(canPieceMoveToTile(board, pieces, [], pieces[0], 1)).toBe(false)
+      expect(canPieceMoveToTile(board, pieces, [], pieces[0], 6)).toBe(false)
+    })
   })
 })

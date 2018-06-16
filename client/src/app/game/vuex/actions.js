@@ -18,10 +18,33 @@ export const setOrMoveActivePiece = ({ commit, state }, tile) => {
       }
 
       commit('MOVE_PIECE', { index: state.board[state.activeTile], tile })
+
+      let otherPlayer = state.currentPlayer === 'white' ? 'white' : 'black'
+      if (isPlayerInCheck(otherPlayer, state.board, state.pieces)) {
+        commit('SET_CHECK', { color: otherPlayer, status: true })
+      }
+
       commit('UNSET_ACTIVE')
       commit('SWITCH_TURN')
     }
   }
+}
+
+export const isPlayerInCheck = (color, board, pieces) => {
+  let king = pieces.filter(piece => {
+    return piece.color === color && piece.type === 'king'
+  })[0]
+  if (king === undefined) return false
+
+  for (let i = 0, end = pieces.length; i < end; i++) {
+    if (pieces[i].color !== 'color') {
+      if (canPieceMoveToTile(board, pieces, [], pieces[i], king.tile, { checkForCheck: false })) {
+        return true
+      }
+    }
+  }
+
+  return false
 }
 
 export const canSelectTile = (state, tile) => {
@@ -31,7 +54,9 @@ export const canSelectTile = (state, tile) => {
   return true
 }
 
-export const canPieceMoveToTile = (board, pieces, previousMoves, activePiece, tile) => {
+export const canPieceMoveToTile = (board, pieces, previousMoves, activePiece, tile,
+  { checkForCheck } = { checkForCheck: true }
+) => {
   let diff = abs(activePiece.tile - tile)
   let dir = activePiece.color === 'white' ? 1 : -1
 
@@ -144,6 +169,26 @@ export const canPieceMoveToTile = (board, pieces, previousMoves, activePiece, ti
   if (activePiece.type === 'king') {
     // RULE - king can move 1 tile in any direction
     if (diffRow > 1 || diffCol > 1) return false
+
+    // RULE - castling
+    // cannot do it if the knight has moved
+    // cannot do it if the king has moved
+    // cannot have pieces in the way
+    // cannot move if ANY pieces including and in between movement are under attack
+  }
+
+  // RULE - piece cannot move if it puts the king in check
+  if (checkForCheck) {
+    let newBoard = board.map(boardItem => boardItem)
+    let newPieces = pieces.map(piece => Object.assign({}, piece))
+
+    let oldTile = activePiece.tile
+    let pieceIndex = newBoard[oldTile]
+    newPieces[newBoard[oldTile]].tile = tile
+    newBoard[oldTile] = null
+    newBoard[tile] = pieceIndex
+
+    if (isPlayerInCheck(activePiece.color, newBoard, newPieces)) return false
   }
 
   return true

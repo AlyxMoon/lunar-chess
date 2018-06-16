@@ -18,6 +18,7 @@ const state = {
   currentPlayer: 'white',
   activeTile: null,
   moves: [],
+  playerInCheck: '',
   pieces: [
     {
       type: 'rook',

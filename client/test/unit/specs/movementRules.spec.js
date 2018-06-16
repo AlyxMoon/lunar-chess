@@ -1,7 +1,7 @@
 import { canPieceMoveToTile } from '@/app/game/vuex/actions'
 
 describe('Movement Rules', () => {
-  let board = Array(64).fill(null)
+  let board
 
   beforeEach(() => {
     board = Array(64).fill(null)
@@ -96,6 +96,30 @@ describe('Movement Rules', () => {
 
       expect(canPieceMoveToTile(board, pieces, pieces[0], -8)).toBe(false)
       expect(canPieceMoveToTile(board, pieces, pieces[0], 64)).toBe(false)
+    })
+    it('piece cannot move if it puts the king in check', () => {
+      board[35] = 0
+      board[34] = 1
+      board[33] = 2
+      let pieces = [
+        {
+          type: 'king',
+          color: 'white',
+          tile: 35
+        },
+        {
+          type: 'rook',
+          color: 'white',
+          tile: 34
+        },
+        {
+          type: 'rook',
+          color: 'black',
+          tile: 33
+        }
+      ]
+
+      expect(canPieceMoveToTile(board, pieces, [], pieces[1], 42)).toBe(false)
     })
   })
 

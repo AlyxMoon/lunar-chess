@@ -9,7 +9,7 @@
         v-for="(pieceIndex, tile) in board"
         :key="tile"
         @click="setOrMoveActivePiece(tile)" >
-        {{tile}}
+        <span v-if="showTileNumbers" class="tile-number">{{tile + 1}}</span>
         <div class="piece-wrapper" v-if="isPieceOnTile(tile)">
           <i
             :class="getPieceClasses(pieceIndex)"
@@ -28,8 +28,15 @@
     </div>
     <div class="options">
       <h1>Display Options</h1>
-      <input type="checkbox" name="showPossibleMoves" :checked="showPossibleMoves" @click="toggleOption('showPossibleMoves')" />
-      <label for="showPossibleMoves">Highlight the possible moves of the currently selected piece.</label>
+      <p>
+        <input type="checkbox" name="showPossibleMoves" :checked="showPossibleMoves" @click="toggleOption('showPossibleMoves')" />
+        <label for="showPossibleMoves">Highlight the possible moves of the currently selected piece.</label>
+      </p>
+
+      <p>
+        <input type="checkbox" name="showTileNumbers" :checked="showTileNumbers" @click="toggleOption('showTileNumbers')" />
+        <label for="showTileNumbers">Show tile numbers.</label>
+      </p>
     </div>
   </div>
 </template>
@@ -44,7 +51,8 @@ export default {
       board: state => state.game.board,
       pieces: state => state.game.pieces,
       currentPlayer: state => state.game.currentPlayer,
-      showPossibleMoves: state => state.game.options.showPossibleMoves
+      showPossibleMoves: state => state.game.options.showPossibleMoves,
+      showTileNumbers: state => state.game.options.showTileNumbers
     }),
     ...mapGetters([
       'getTileClasses',
@@ -76,6 +84,8 @@ export default {
   }
 
   .tile {
+    position: relative;
+
     &.tile-a {
       background-color: #EEE;
     }
@@ -91,6 +101,12 @@ export default {
     &.tile-possibleMove {
       background-color: #20B2AA;
     }
+  }
+
+  .tile-number {
+    position: absolute;
+    top: 0;
+    left: 2px;
   }
 
   .piece-wrapper {

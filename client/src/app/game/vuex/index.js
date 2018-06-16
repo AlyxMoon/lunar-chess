@@ -15,7 +15,8 @@ for (let i = 0, end = 64; i < end; i++) {
 
 const state = {
   options: {
-    showPossibleMoves: true
+    showPossibleMoves: true,
+    showTileNumbers: true
   },
   currentPlayer: 'white',
   activeTile: null,

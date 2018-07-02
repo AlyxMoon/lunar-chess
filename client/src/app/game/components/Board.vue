@@ -87,6 +87,7 @@ export default {
   }
 
   .tile {
+    color: black;
     position: relative;
 
     &.tile-a {
@@ -122,6 +123,7 @@ export default {
   }
 
   .piece {
+    color: black;
     height: 70%;
     width: 70%;
 

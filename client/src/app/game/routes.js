@@ -2,7 +2,7 @@ import * as components from './components'
 
 export default [
   {
-    path: '/',
+    path: '/game',
     component: components.Board,
     name: 'gameBoard'
   }

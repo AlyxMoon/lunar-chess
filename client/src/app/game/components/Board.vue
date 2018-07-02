@@ -25,11 +25,13 @@
     </div>
     <div class="graveyard">
       <h1>Graveyard</h1>
-      <ul>
-        <li v-for="(piece, i) in getKilledPieces()" :key="i">
-          {{ piece.type }} -- {{ piece.color }}
-        </li>
-      </ul>
+      <div class="graveyard-tile" v-for="(piece, i) in getKilledPieces()" :key="i">
+        <div class="piece-wrapper">
+          <i
+            :class="`piece ${piece.type} ${piece.color}`"
+          />
+        </div>
+      </div>
     </div>
     <div class="options">
       <h1>Display Options</h1>
@@ -123,6 +125,20 @@ export default {
     position: absolute;
     top: 0;
     left: 2px;
+  }
+
+  .graveyard {
+
+    .graveyard-tile {
+      background-color: #E6E6E6;
+      border-radius: 5px;
+      display: inline-block;
+      height: 64px;
+      margin-right: 3px;
+      position: relative;
+      text-align: center;
+      width: 64px;
+    }
   }
 
   .piece-wrapper {

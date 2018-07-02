@@ -1,5 +1,10 @@
 <template>
   <div>
+    <div class="navbar">
+      <router-link tag="span" to="/">
+        <a class="btn">Main Menu</a>
+      </router-link>
+    </div>
     <div class="game-data">
       <h2>Current Player's Turn: {{ currentPlayer }}</h2>
     </div>
@@ -71,6 +76,12 @@ export default {
 </script>
 
 <style scoped lang="scss">
+  .navbar {
+    span {
+      display: block;
+    }
+  }
+
   .chessboard {
     background-color: black;
     border: 2px solid rgba(0,0,0,0.8);

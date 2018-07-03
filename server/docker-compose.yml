@@ -3,7 +3,7 @@ services:
   web:
     build: .
     container_name: lunar-chess-server
-    command: npm run start
+    command: yarn run start
     volumes:
       - .:/usr/src/app/
       - /usr/src/app/node_modules

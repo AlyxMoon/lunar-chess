@@ -17,7 +17,7 @@
 import { mapActions, mapGetters } from 'vuex'
 
 export default {
-  name: 'loginForm',
+  name: 'login',
 
   computed: {
     ...mapGetters([

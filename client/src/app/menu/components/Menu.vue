@@ -34,19 +34,12 @@
         </a>
       </router-link>
     </div>
-    <login-form></login-form>
   </div>
 </template>
 
 <script>
-import LoginForm from './loginForm'
-
 export default {
-  name: 'mainMenu',
-
-  components: {
-    'login-form': LoginForm
-  }
+  name: 'mainMenu'
 }
 </script>
 

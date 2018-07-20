@@ -1,12 +1,25 @@
 <template>
   <div id="app">
+    <component-navbar></component-navbar>
     <router-view />
   </div>
 </template>
 
 <script>
+import { Navbar } from './fragments'
+
 export default {
-  name: 'App'
+  name: 'App',
+
+  components: {
+    'component-navbar': Navbar
+  },
+
+  data: () => {
+    return {
+      user: null
+    }
+  }
 }
 </script>
 

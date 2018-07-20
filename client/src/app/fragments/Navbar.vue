@@ -39,7 +39,7 @@ export default {
     ...mapActions([
       'logout'
     ]),
-    afterLogout: function () {
+    afterLogout: function (err) {
       if (!err) {
         this.$router.push('/')
       }

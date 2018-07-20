@@ -23,3 +23,18 @@ export const login = (
       callback(err)
     })
 }
+
+export const logout = (
+  { commit },
+  { callback } = { callback: () => {} }
+) => {
+  fetch(`${apiAddress}/logout`)
+    .then(() => {
+      commit('UNSET_USER')
+      callback()
+    })
+    .catch(err => {
+      console.error(err.message, err.stack)
+      callback(err)
+    })
+}

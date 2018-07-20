@@ -3,25 +3,28 @@
     <ul class="nav-items-wrapper">
       <div class="nav-item">
         <router-link tag="li" to="/">
-          <a>Home</a>
+          <a class="nav-item-button">Home</a>
         </router-link>
       </div>
     </ul>
     <ul class="nav-items-wrapper align-right">
-      <div class="nav-item">
-        <router-link v-if="!user" tag="li" to="/login">
-          <a>Login</a>
+      <div v-if="!user" class="nav-item">
+        <router-link tag="li" to="/login">
+          <a class="nav-item-button">Login</a>
         </router-link>
-        <span v-else>
-          Logged In: {{ user.username }}
-        </span>
+      </div>
+      <div v-if="user" class="nav-item">
+        Logged In: {{ user.username }}
+      </div>
+      <div v-if="user" class="nav-item">
+        <button class="nav-item-button" @click.prevent="logout({ callback: afterLogout })">Logout</button>
       </div>
     </ul>
   </nav>
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 
 export default {
   name: 'navbar',
@@ -30,6 +33,17 @@ export default {
     ...mapState({
       user: state => state.menu.user
     })
+  },
+
+  methods: {
+    ...mapActions([
+      'logout'
+    ]),
+    afterLogout: function () {
+      if (!err) {
+        this.$router.push('/')
+      }
+    }
   }
 }
 </script>
@@ -64,21 +78,24 @@ export default {
   font-weight: bold;
   padding: 0 5px;
 
-  a {
-    color: #C3FFEE;
-    font-size: 20px;
-    font-weight: bold;
-    text-decoration: none;
-    transition-duration: 0.2s;
-
-    &:hover {
-      color: #E2FBF4;
-      font-size: 22px;
-    }
-  }
-
   &.align-right {
     margin-left: auto;
+  }
+}
+
+.nav-item-button {
+  background: none;
+  border: none;
+  color: #C3FFEE;
+  font-size: 20px;
+  font-weight: bold;
+  padding: 0;
+  text-decoration: none;
+  transition-duration: 0.2s;
+
+  &:hover {
+    color: #E2FBF4;
+    font-size: 22px;
   }
 }
 

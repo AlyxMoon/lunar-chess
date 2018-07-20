@@ -1,12 +1,17 @@
 const path = require('path')
+const { auth } = require('./auth')
 
 module.exports = (app, passport) => {
   app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'dist', 'index.html'))
   })
 
-  app.get('/login', (req, res) => {
-    console.log('login route reached')
+  app.post('/login', auth.authenticate('local'), (req, res) => {
+    const safeUser = Object.assign({}, req.user)
+    delete safeUser.password
+
+    res.setHeader('Content-Type', 'application/json')
+    res.json(safeUser)
   })
 
   app.get('/register', (req, res) => {

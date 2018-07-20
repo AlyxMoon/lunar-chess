@@ -1,5 +1,6 @@
 const path = require('path')
 const express = require('express')
+const cors = require('cors')
 const passport = require('passport')
 const PORT = process.env.PORT || 8080
 const HOST = process.env.HOST || '0.0.0.0'
@@ -14,6 +15,7 @@ db.init()
 const app = express()
 app.use('/static', express.static(path.join(__dirname, 'dist', 'static')))
 
+app.use(cors())
 app.use(cookieParser())
 app.use(bodyParser())
 app.use(session({ secret: 'lunar-chess-app' }))

@@ -30,25 +30,23 @@
         <a
           class="btn unavailable"
           title="this option is not coded in yet :)">
-          View Leaderboards
-        </a>
-      </router-link>
-      <router-link tag="span" to="#">
-        <a
-          class="btn unavailable"
-          title="this option is not coded in yet :)">
           View Previous Games
         </a>
       </router-link>
-
     </div>
+    <login-form></login-form>
   </div>
 </template>
 
 <script>
+import LoginForm from './loginForm'
 
 export default {
-  name: 'mainMenu'
+  name: 'mainMenu',
+
+  components: {
+    'login-form': LoginForm
+  }
 }
 </script>
 

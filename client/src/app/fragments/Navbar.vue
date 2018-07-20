@@ -9,9 +9,12 @@
     </ul>
     <ul class="nav-items-wrapper align-right">
       <div class="nav-item">
-        <router-link tag="li" to="/login">
+        <router-link v-if="!user" tag="li" to="/login">
           <a>Login</a>
         </router-link>
+        <span v-else>
+          Logged In: {{ user.username }}
+        </span>
       </div>
     </ul>
   </nav>
@@ -57,6 +60,8 @@ export default {
 }
 
 .nav-item {
+  font-size: 20px;
+  font-weight: bold;
   padding: 0 5px;
 
   a {

@@ -1,6 +1,5 @@
 <template>
-    <form @submit.prevent="login({ username, password })">
-      <span v-if="isLoggedIn">test!</span>
+    <form @submit.prevent="login({ username, password, callback: afterLogin })">
       <div>
           <label>Username:</label>
           <input type="text" name="username" v-model="username" />
@@ -35,7 +34,12 @@ export default {
   methods: {
     ...mapActions([
       'login'
-    ])
+    ]),
+    afterLogin: function (err) {
+      if (!err) {
+        this.$router.push('/')
+      }
+    }
   }
 }
 </script>

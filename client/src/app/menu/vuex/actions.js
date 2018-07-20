@@ -1,8 +1,10 @@
 import fetch from 'isomorphic-unfetch'
 import { apiAddress } from '@/consts.js'
 
-export const login = ({ commit }, { username, password }) => {
-  console.log(username, password)
+export const login = (
+  { commit },
+  { username, password, callback } = { callback: () => {} }
+) => {
   fetch(`${apiAddress}/login`, {
     method: 'POST',
     headers: {
@@ -14,8 +16,10 @@ export const login = ({ commit }, { username, password }) => {
     .then(user => {
       console.log('login success!', user)
       commit('SET_USER', { user })
+      callback()
     })
     .catch(err => {
       console.error(err.message, err.stack)
+      callback(err)
     })
 }

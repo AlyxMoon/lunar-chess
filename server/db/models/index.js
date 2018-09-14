@@ -1,5 +1,5 @@
-const User = require('./User.js')
+const User = require('./User')
 
-module.exports = {
-  User
-}
+User.hasAndBelongsToMany(User, 'friends', 'id', 'id', { type: 'friend' })
+
+module.exports = { User }

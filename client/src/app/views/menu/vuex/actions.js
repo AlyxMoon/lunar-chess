@@ -5,7 +5,7 @@ export const login = (
   { commit },
   { username, password, callback } = { callback: () => {} }
 ) => {
-  fetch(`${apiAddress}/login`, {
+  fetch(`${apiAddress}/auth/login`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -28,7 +28,7 @@ export const logout = (
   { commit },
   { callback } = { callback: () => {} }
 ) => {
-  fetch(`${apiAddress}/logout`)
+  fetch(`${apiAddress}/auth/logout`)
     .then(() => {
       commit('UNSET_USER')
       callback()

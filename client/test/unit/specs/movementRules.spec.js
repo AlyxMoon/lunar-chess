@@ -333,6 +333,7 @@ describe('Movement Rules', () => {
       expect(canPieceMoveToTile(board, pieces, [], pieces[1], 15)).toBe(false)
     })
     it('pawns can attack en passent only when the enemy pawn has just made a double move in the previous turn', () => {
+      board[0] = 2
       board[1] = 0
       board[2] = 1
       let pieces = [
@@ -370,8 +371,9 @@ describe('Movement Rules', () => {
         }
       ]
 
-      expect(canPieceMoveToTile(board, pieces, previousMoves1, pieces[0], 9)).toBe(true)
+      expect(canPieceMoveToTile(board, pieces, previousMoves1, pieces[0], 10)).toBe(true)
       expect(canPieceMoveToTile(board, pieces, previousMoves2, pieces[0], 8)).toBe(false)
+      expect(canPieceMoveToTile(board, pieces, [], pieces[0], 10)).toBe(false)
     })
   })
 

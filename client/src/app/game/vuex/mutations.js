@@ -8,6 +8,12 @@ export default {
     state.activePiece = null
   },
   MOVE_PIECE (state, payload) {
+    state.history.push({
+      piece: payload.index,
+      previousTile: state.pieces[payload.index].tile,
+      newTile: payload.tile
+    })
+
     state.board[state.activeTile] = null
     state.board[payload.tile] = payload.index
     state.pieces[payload.index].tile = payload.tile

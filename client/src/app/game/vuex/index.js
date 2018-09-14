@@ -20,7 +20,6 @@ const state = {
   },
   currentPlayer: 'white',
   activeTile: null,
-  moves: [],
   playerInCheck: '',
   pieces: [
     {
@@ -216,6 +215,7 @@ const state = {
       alive: true
     }
   ],
+  history: [],
   board
 }
 

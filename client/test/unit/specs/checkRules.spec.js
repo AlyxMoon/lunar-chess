@@ -23,7 +23,7 @@ describe('Check Rules - isPlayerInCheck', () => {
       }
     ]
 
-    expect(isPlayerInCheck('white', board, pieces)).toBe(true)
+    expect(isPlayerInCheck('white', board, [], pieces)).toBe(true)
   })
   it('returns false when king cannot be attacked by an enemy unit', () => {
     board[35] = 0
@@ -41,6 +41,6 @@ describe('Check Rules - isPlayerInCheck', () => {
       }
     ]
 
-    expect(isPlayerInCheck('white', board, pieces)).toBe(false)
+    expect(isPlayerInCheck('white', board, [], pieces)).toBe(false)
   })
 })

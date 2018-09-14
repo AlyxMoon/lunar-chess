@@ -1,5 +1,5 @@
 const path = require('path')
-const { auth } = require('./auth')
+const { auth } = require('../auth')
 
 module.exports = (app, passport) => {
   app.get('/', (req, res) => {

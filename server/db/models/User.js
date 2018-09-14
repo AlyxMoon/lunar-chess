@@ -1,4 +1,4 @@
-const configDB = require('../config/database.js')
+const configDB = require('../../config/database.js')
 const thinkagain = require('thinkagain')(configDB)
 
 const User = thinkagain.createModel('User', {

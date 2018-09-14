@@ -1,5 +1,5 @@
 const rethinkDB = require('rethinkdb')
-const configDB = require('./config/database.js')
+const configDB = require('../config/database.js')
 
 const models = require('./models') // eslint-disable-line
 

@@ -9,7 +9,7 @@ const cookieParser = require('cookie-parser')
 const bodyParser = require('body-parser')
 const session = require('express-session')
 
-const db = require('./db.js')
+const db = require('./db')
 db.init()
 
 const app = express()
@@ -17,12 +17,18 @@ app.use('/static', express.static(path.join(__dirname, 'dist', 'static')))
 
 app.use(cors())
 app.use(cookieParser())
-app.use(bodyParser())
-app.use(session({ secret: 'lunar-chess-app' }))
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: true }))
+app.use(session({
+  secret: 'lunar-chess-app',
+  resave: false,
+  saveUninitialized: false,
+  cookie: { sameSite: false }
+}))
 app.use(passport.initialize())
 app.use(passport.session())
 
-require('./routes.js')(app, passport)
+require('./routes')(app, passport)
 
 app.listen(PORT, HOST)
 console.log(`Running on http://${HOST}:${PORT}`)

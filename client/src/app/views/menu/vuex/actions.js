@@ -7,15 +7,15 @@ export const login = (
 ) => {
   fetch(`${apiAddress}/auth/login`, {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
+    headers: { 'Content-Type': 'application/json' },
+    credentials: 'include',
     body: JSON.stringify({ username, password })
   })
     .then(res => res.json())
-    .then(user => {
-      console.log('login success!', user)
-      commit('SET_USER', { user })
+    .then(res => {
+      if (!res.success) throw new Error(res.error)
+
+      commit('SET_USER', { user: res.data })
       callback()
     })
     .catch(err => {

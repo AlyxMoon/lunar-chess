@@ -69,7 +69,6 @@ export const canSelectTile = (state, tile) => {
 export const canPieceMoveToTile = (board, pieces, history, piece, tile,
   { checkForCheck } = { checkForCheck: true }
 ) => {
-  console.log('in the function!', history)
   let diff = abs(piece.tile - tile)
   let dir = piece.color === 'white' ? 1 : -1
 

@@ -1,22 +1,29 @@
 const passport = require('../../auth')
-const { isLoggedIn } = require('../../middleware')
+// const { allowLocalCredentials } = require('../../middleware')
 
 const router = require('express').Router()
 
 router.post('/login', passport.authenticate('local'), (req, res) => {
-  const safeUser = Object.assign({}, req.user)
-  delete safeUser.password
-
   res.setHeader('Content-Type', 'application/json')
-  res.json(safeUser)
+
+  const { password, ...safeUser } = req.user
+  req.login(safeUser, error => {
+    if (error) {
+      console.error(error.message, error.stack)
+      return res.json({ success: false, error: error.message })
+    }
+    res.json({ success: true, data: req.user })
+  })
 })
 
 router.get('/register', (req, res) => {
   console.log('register route reached')
 })
 
-router.get('/profile', isLoggedIn, (req, res) => {
-  console.log('profile route reached', res.user)
+router.get('/profile', (req, res) => {
+  res.setHeader('Content-Type', 'application/json')
+  console.log(req.isAuthenticated(), req.user)
+  res.json(req.user)
 })
 
 router.get('/logout', (req, res) => {

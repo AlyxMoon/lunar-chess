@@ -6,6 +6,7 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
 import { Navbar } from './fragments'
 
 export default {
@@ -15,10 +16,10 @@ export default {
     'component-navbar': Navbar
   },
 
-  data: () => {
-    return {
-      user: null
-    }
+  methods: mapActions(['existingLogin']),
+
+  created () {
+    this.$store.dispatch('existingLogin')
   }
 }
 </script>

@@ -20,10 +20,9 @@ router.get('/register', (req, res) => {
   console.log('register route reached')
 })
 
-router.get('/profile', (req, res) => {
+router.get('/user', (req, res) => {
   res.setHeader('Content-Type', 'application/json')
-  console.log(req.isAuthenticated(), req.user)
-  res.json(req.user)
+  res.json({ data: req.user })
 })
 
 router.get('/logout', (req, res) => {

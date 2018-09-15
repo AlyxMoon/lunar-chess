@@ -8,9 +8,6 @@
       </div>
     </ul>
     <ul class="nav-items-wrapper align-right">
-      <div class="nav-item">
-        <button class="nav-item-button" @click.prevent="checkUser()">Check User</button>
-      </div>
       <div v-if="!user" class="nav-item">
         <router-link tag="li" to="/login">
           <a class="nav-item-button">Login</a>
@@ -28,9 +25,6 @@
 
 <script>
 import { mapActions, mapState } from 'vuex'
-import fetch from 'isomorphic-unfetch'
-
-import { apiAddress } from '@/consts.js'
 
 export default {
   name: 'navbar',
@@ -45,14 +39,6 @@ export default {
     ...mapActions([
       'logout'
     ]),
-    checkUser: function () {
-      fetch(`${apiAddress}/auth/profile`, {
-        credentials: 'include'
-      })
-        .then(res => res.json())
-        .then(console.log)
-        .catch(console.error)
-    },
     afterLogout: function (err) {
       if (!err) {
         this.$router.push('/')

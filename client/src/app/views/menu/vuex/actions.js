@@ -1,9 +1,23 @@
 import fetch from 'isomorphic-unfetch'
 import { apiAddress } from '@/consts.js'
 
+export const existingLogin = ({ commit }) => {
+  fetch(`${apiAddress}/auth/user`, {
+    headers: { 'Content-Type': 'application/json' },
+    credentials: 'include'
+  })
+    .then(res => res.json())
+    .then(res => {
+      if (res.data) commit('SET_USER', { user: res.data })
+    })
+    .catch(err => {
+      console.error(err.message, err.stack)
+    })
+}
+
 export const login = ({ commit }, {
-  username,
-  password,
+  username = '',
+  password = '',
   callback = () => {}
 }) => {
   fetch(`${apiAddress}/auth/login`, {

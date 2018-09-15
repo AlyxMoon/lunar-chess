@@ -12,13 +12,11 @@
           Random Ranked Game
         </a>
       </router-link>
-      <router-link tag="span" to="#">
-        <a
-          class="btn unavailable"
-          title="this option is not coded in yet :)">
+      <span>
+        <a class="btn" @click.prevent="requestGame({ type: 'unranked' })">
           Random Unranked Game
         </a>
-      </router-link>
+      </span>
       <router-link tag="span" to="#">
         <a
           class="btn unavailable"
@@ -38,8 +36,13 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
+
 export default {
-  name: 'mainMenu'
+  name: 'mainMenu',
+  methods: {
+    ...mapActions(['requestGame'])
+  }
 }
 </script>
 

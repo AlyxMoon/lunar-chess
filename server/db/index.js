@@ -36,6 +36,15 @@ module.exports = {
     })
   },
 
+  findCount: ({ model = '', filters = {} }) => {
+    return new Promise((resolve, reject) => {
+      if (!isKnownModel(model)) {
+        return reject(new Error(`Model ${model} was not recognized as a valid type`))
+      }
+      return resolve(knownModels[model].filter(Object.assign({}, filters)).count().execute())
+    })
+  },
+
   findOne: ({ model = '', filters = {}, joins = {} }) => {
     return new Promise((resolve, reject) => {
       if (!isKnownModel(model)) {

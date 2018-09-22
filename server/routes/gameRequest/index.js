@@ -1,6 +1,6 @@
 const router = require('express').Router()
 const db = require('../../db')
-const { validGameTypes } = require('../../config/game')
+const { maxRequestsForType, validGameTypes } = require('../../config/game')
 
 const model = { model: 'GameRequest' }
 
@@ -42,7 +42,13 @@ router.post('/', (req, res) => {
   }
 
   data.userID = req.user.id
-  db.create({ ...model, data })
+  db.findCount({ ...model, filters: data })
+    .then(count => {
+      if (count >= maxRequestsForType) {
+        throw new Error('there are already enough requests for that game type')
+      }
+      return db.create({ ...model, data })
+    })
     .then(result => {
       res.json({ success: true, data: result })
     })

@@ -1,6 +1,7 @@
 const router = require('express').Router()
 const db = require('../../db')
 const { maxRequestsForType, validGameTypes } = require('../../config/game')
+const { initializeGameState } = require('../../lib')
 
 const model = { model: 'GameRequest' }
 
@@ -47,7 +48,26 @@ router.post('/', (req, res) => {
       if (count >= maxRequestsForType) {
         throw new Error('there are already enough requests for that game type')
       }
-      return db.create({ ...model, data })
+
+      return db.findOne({ ...model, filters: { type: data.type } })
+    })
+    .then(gameRequest => {
+      if (!gameRequest) {
+        return db.create({ ...model, data })
+      }
+
+      let newState = initializeGameState({
+        players: [gameRequest.userID, data.userID],
+        type: data.type
+      })
+
+      return Promise.all([
+        db.create({ model: 'Game', data: newState }),
+        db.remove({ ...model, id: gameRequest.id })
+      ]).then(values => {
+        console.log('did we hit the then statement?')
+        return values[0]
+      })
     })
     .then(result => {
       res.json({ success: true, data: result })

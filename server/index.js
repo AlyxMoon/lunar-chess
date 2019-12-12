@@ -18,7 +18,7 @@ app.use('/static', express.static(path.join(__dirname, 'dist', 'static')))
 app.use(cors({
   credentials: true,
   exposedHeaders: ['set-cookie'],
-  origin: ['http://localhost:8080']
+  origin: [`http://localhost:${PORT}`]
 }))
 app.use(cookieParser())
 app.use(bodyParser.json())

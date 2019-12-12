@@ -3,7 +3,9 @@ const express = require('express')
 const cors = require('cors')
 const passport = require('passport')
 
-require('dotenv').config()
+require('dotenv').config({
+  path: path.resolve(__dirname, '.env')
+})
 
 const PORT = process.env.PORT || 8080
 const HOST = process.env.HOST || '0.0.0.0'
